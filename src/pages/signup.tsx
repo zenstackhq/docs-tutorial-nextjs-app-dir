@@ -3,6 +3,7 @@ import { signIn } from "next-auth/react";
 import Router from "next/router";
 import { useState, type FormEvent } from "react";
 import { useMutateUser } from "../lib/hooks";
+import Link from "next/link";
 
 const Signup: NextPage = () => {
   const [email, setEmail] = useState("");
@@ -64,6 +65,13 @@ const Signup: NextPage = () => {
           className="cursor-pointer rounded border border-gray-500 py-4 text-white"
         />
       </form>
+      <div className="mt-2 text-base font-medium text-gray-300">
+        Already have an account?{" "}
+        <Link href="/signin" className="text-primary-700 underline">
+          {" "}
+          Login here{" "}
+        </Link>
+      </div>
     </div>
   );
 };
