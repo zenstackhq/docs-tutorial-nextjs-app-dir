@@ -1,7 +1,7 @@
 import { withPresets, type DbClientContract } from "@zenstackhq/runtime";
 import ApiHandler from "@zenstackhq/server/api/rpc";
 import { getServerSession } from "next-auth/next";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
 
@@ -39,7 +39,7 @@ const routeHandler = async (req: NextRequest, context: Context) => {
     requestBody,
   });
 
-  return new Response(JSON.stringify(response.body), {
+  return NextResponse.json(JSON.stringify(response.body), {
     status: response.status,
   });
 };
