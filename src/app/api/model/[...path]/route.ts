@@ -5,7 +5,6 @@ import type { NextRequest } from "next/server";
 import { authOptions } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
 
-type Context = { params: { path: string[] } };
 const apiHandler = ApiHandler();
 
 async function getPrisma() {
@@ -16,6 +15,8 @@ async function getPrisma() {
     user: session?.user,
   }) as unknown as DbClientContract;
 }
+
+type Context = { params: { path: string[] } };
 
 // A shim for adapting the Next.js "app" route handler
 const routeHandler = async (req: NextRequest, context: Context) => {
@@ -47,5 +48,6 @@ export {
   routeHandler as GET,
   routeHandler as POST,
   routeHandler as PUT,
+  routeHandler as PATCH,
   routeHandler as DELETE,
 };
