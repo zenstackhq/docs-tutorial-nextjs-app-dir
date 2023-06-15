@@ -8,7 +8,7 @@ async function getPrisma() {
   const session = await getServerSession(authOptions);
   // create a wrapper of Prisma client that enforces access policy,
   // data validation, and @password, @omit behaviors
-  return withPresets(prisma, { user: session?.user }, { logPrismaQuery: true });
+  return withPresets(prisma, { user: session?.user });
 }
 
 const handler = NextRequestHandler({ getPrisma, useAppDir: true });
