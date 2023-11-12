@@ -1,12 +1,15 @@
+"use client";
+
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import Router from "next/router";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
 const Signin: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   async function onSignin(e: FormEvent) {
     e.preventDefault();
@@ -18,7 +21,7 @@ const Signin: NextPage = () => {
     });
 
     if (result?.ok) {
-      Router.push("/");
+      router.push("/");
     } else {
       alert("Signin failed");
     }

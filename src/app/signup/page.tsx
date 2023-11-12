@@ -1,14 +1,17 @@
+"use client";
+
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
-import Router from "next/router";
-import { useState, type FormEvent } from "react";
-import { useMutateUser } from "../lib/hooks";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, type FormEvent } from "react";
+import { useMutateUser } from "../../lib/hooks";
 
 const Signup: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { createUser: signup } = useMutateUser();
+  const router = useRouter();
 
   async function onSignup(e: FormEvent) {
     e.preventDefault();
@@ -28,7 +31,7 @@ const Signup: NextPage = () => {
 
     // signin to create a session
     await signIn("credentials", { redirect: false, email, password });
-    Router.push("/");
+    router.push("/");
   }
 
   return (

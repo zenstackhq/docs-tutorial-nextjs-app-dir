@@ -1,16 +1,20 @@
+"use client";
+
 import type { Post } from "@prisma/client";
 import { type NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import Router from "next/router";
+import { useRouter } from "next/navigation";
 import { useFindManyPost, useMutatePost } from "../lib/hooks";
 
 type AuthUser = { id: string; email?: string | null };
 
 const Welcome = ({ user }: { user: AuthUser }) => {
+  const router = useRouter();
+
   async function onSignout() {
     await signOut({ redirect: false });
-    Router.push("/signin");
+    router.push("/signin");
   }
   return (
     <div className="flex gap-4">
