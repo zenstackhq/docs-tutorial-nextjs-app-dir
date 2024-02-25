@@ -14,10 +14,7 @@ const config = {
     defaultLocale: "en",
   },
   experimental: {
-    serverComponentsExternalPackages: [
-      "@zenstackhq/runtime",
-      "@zenstackhq/server",
-    ],
+    serverComponentsExternalPackages: ["@zenstackhq/runtime"],
   },
 };
 export default config;
