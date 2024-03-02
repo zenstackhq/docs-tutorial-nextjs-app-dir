@@ -12,16 +12,18 @@ generator client {
     provider = "prisma-client-js"
 }
 
-/// @@allow('all', auth() == author)
+/// @@allow('all', auth() == createdBy)
 /// @@allow('read', auth() != null && published)
 model Post {
-    id String @id() @default(cuid())
+    id Int @id() @default(autoincrement())
+    name String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()
-    title String
     published Boolean @default(false)
-    author User @relation(fields: [authorId], references: [id])
-    authorId String
+    createdBy User @relation(fields: [createdById], references: [id])
+    createdById String
+
+    @@index([name])
 }
 
 model Account {
@@ -60,14 +62,13 @@ model User {
     /// @password
     /// @omit
     password String
-    posts Post[]
     image String?
     accounts Account[]
     sessions Session[]
+    posts Post[]
 }
 
 model VerificationToken {
-    id String @id() @default(cuid())
     identifier String
     token String @unique()
     expires DateTime

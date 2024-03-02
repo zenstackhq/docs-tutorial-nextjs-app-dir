@@ -4,9 +4,14 @@ const metadata = {
         post: {
             id: {
                 name: 'id',
-                type: 'String',
+                type: 'Int',
                 isId: true,
                 attributes: [{ name: '@default', args: [] }],
+                isAutoIncrement: true,
+            },
+            name: {
+                name: 'name',
+                type: 'String',
             },
             createdAt: {
                 name: 'createdAt',
@@ -18,25 +23,21 @@ const metadata = {
                 type: 'DateTime',
                 attributes: [{ name: '@updatedAt', args: [] }],
             },
-            title: {
-                name: 'title',
-                type: 'String',
-            },
             published: {
                 name: 'published',
                 type: 'Boolean',
                 attributes: [{ name: '@default', args: [{ value: false }] }],
             },
-            author: {
-                name: 'author',
+            createdBy: {
+                name: 'createdBy',
                 type: 'User',
                 isDataModel: true,
                 backLink: 'posts',
                 isRelationOwner: true,
-                foreignKeyMapping: { id: 'authorId' },
+                foreignKeyMapping: { id: 'createdById' },
             },
-            authorId: {
-                name: 'authorId',
+            createdById: {
+                name: 'createdById',
                 type: 'String',
                 isForeignKey: true,
             },
@@ -164,13 +165,6 @@ const metadata = {
                 name: 'password',
                 type: 'String',
             },
-            posts: {
-                name: 'posts',
-                type: 'Post',
-                isDataModel: true,
-                isArray: true,
-                backLink: 'author',
-            },
             image: {
                 name: 'image',
                 type: 'String',
@@ -190,14 +184,15 @@ const metadata = {
                 isArray: true,
                 backLink: 'user',
             },
+            posts: {
+                name: 'posts',
+                type: 'Post',
+                isDataModel: true,
+                isArray: true,
+                backLink: 'createdBy',
+            },
         },
         verificationToken: {
-            id: {
-                name: 'id',
-                type: 'String',
-                isId: true,
-                attributes: [{ name: '@default', args: [] }],
-            },
             identifier: {
                 name: 'identifier',
                 type: 'String',
@@ -205,6 +200,7 @@ const metadata = {
             token: {
                 name: 'token',
                 type: 'String',
+                isId: true,
             },
             expires: {
                 name: 'expires',
@@ -253,10 +249,6 @@ const metadata = {
             identifier_token: {
                 name: 'identifier_token',
                 fields: ['identifier', 'token'],
-            },
-            id: {
-                name: 'id',
-                fields: ['id'],
             },
             token: {
                 name: 'token',

@@ -1,313 +1,666 @@
 /* eslint-disable */
-import type { Prisma } from '@prisma/client';
-import {
-    type GetNextArgs,
-    type QueryOptions,
-    type InfiniteQueryOptions,
-    type MutationOptions,
-    type PickEnumerable,
-    useHooksContext,
-} from '@zenstackhq/swr/runtime';
+import type { Prisma, VerificationToken } from '@prisma/client';
+import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
+import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
+import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
+import type { PickEnumerable, CheckSelect } from '@zenstackhq/tanstack-query/runtime-v5';
 import metadata from './__model_meta';
-import * as request from '@zenstackhq/swr/runtime';
-
-/** @deprecated Use mutation hooks (useCreateXXX, useUpdateXXX, etc.) instead. */
-export function useMutateVerificationToken() {
-    const { endpoint, fetch } = useHooksContext();
-    const invalidate = request.useInvalidation('VerificationToken', metadata);
-
-    /** @deprecated Use `useCreateVerificationToken` hook instead. */
-    async function createVerificationToken<T extends Prisma.VerificationTokenCreateArgs>(
-        args: Prisma.SelectSubset<T, Prisma.VerificationTokenCreateArgs>,
-    ) {
-        return await request.mutationRequest<
-            Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenCreateArgs> | undefined,
-            true
-        >('POST', `${endpoint}/verificationToken/create`, args, invalidate, fetch, true);
-    }
-
-    /** @deprecated Use `useUpdateVerificationToken` hook instead. */
-    async function updateVerificationToken<T extends Prisma.VerificationTokenUpdateArgs>(
-        args: Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateArgs>,
-    ) {
-        return await request.mutationRequest<
-            Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenUpdateArgs> | undefined,
-            true
-        >('PUT', `${endpoint}/verificationToken/update`, args, invalidate, fetch, true);
-    }
-
-    /** @deprecated Use `useUpdateManyVerificationToken` hook instead. */
-    async function updateManyVerificationToken<T extends Prisma.VerificationTokenUpdateManyArgs>(
-        args: Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateManyArgs>,
-    ) {
-        return await request.mutationRequest<Prisma.BatchPayload, false>(
-            'PUT',
-            `${endpoint}/verificationToken/updateMany`,
-            args,
-            invalidate,
-            fetch,
-            false,
-        );
-    }
-
-    /** @deprecated Use `useUpsertVerificationToken` hook instead. */
-    async function upsertVerificationToken<T extends Prisma.VerificationTokenUpsertArgs>(
-        args: Prisma.SelectSubset<T, Prisma.VerificationTokenUpsertArgs>,
-    ) {
-        return await request.mutationRequest<
-            Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenUpsertArgs> | undefined,
-            true
-        >('POST', `${endpoint}/verificationToken/upsert`, args, invalidate, fetch, true);
-    }
-
-    /** @deprecated Use `useDeleteVerificationToken` hook instead. */
-    async function deleteVerificationToken<T extends Prisma.VerificationTokenDeleteArgs>(
-        args: Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteArgs>,
-    ) {
-        return await request.mutationRequest<
-            Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenDeleteArgs> | undefined,
-            true
-        >('DELETE', `${endpoint}/verificationToken/delete`, args, invalidate, fetch, true);
-    }
-
-    /** @deprecated Use `useDeleteManyVerificationToken` hook instead. */
-    async function deleteManyVerificationToken<T extends Prisma.VerificationTokenDeleteManyArgs>(
-        args: Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteManyArgs>,
-    ) {
-        return await request.mutationRequest<Prisma.BatchPayload, false>(
-            'DELETE',
-            `${endpoint}/verificationToken/deleteMany`,
-            args,
-            invalidate,
-            fetch,
-            false,
-        );
-    }
-    return {
-        createVerificationToken,
-        updateVerificationToken,
-        updateManyVerificationToken,
-        upsertVerificationToken,
-        deleteVerificationToken,
-        deleteManyVerificationToken,
-    };
-}
+type DefaultError = Error;
+import { useSuspenseModelQuery, useSuspenseInfiniteModelQuery } from '@zenstackhq/tanstack-query/runtime-v5/react';
+import type { UseSuspenseQueryOptions, UseSuspenseInfiniteQueryOptions } from '@tanstack/react-query';
 
 export function useCreateVerificationToken(
-    options?: MutationOptions<
-        Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenCreateArgs> | undefined,
-        unknown,
-        Prisma.VerificationTokenCreateArgs
+    options?: Omit<
+        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenCreateArgs>,
+        'mutationFn'
     >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
 ) {
-    const mutation = request.useModelMutation('VerificationToken', 'POST', 'create', metadata, options, true);
-    return {
-        ...mutation,
-        trigger: <T extends Prisma.VerificationTokenCreateArgs>(
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.VerificationTokenCreateArgs, VerificationToken, true>(
+        'VerificationToken',
+        'POST',
+        `${endpoint}/verificationToken/create`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        true,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.VerificationTokenCreateArgs>(
             args: Prisma.SelectSubset<T, Prisma.VerificationTokenCreateArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
+                    unknown,
+                    Prisma.SelectSubset<T, Prisma.VerificationTokenCreateArgs>
+                >,
+                'mutationFn'
+            >,
         ) => {
-            return mutation.trigger(args, options as any) as Promise<Prisma.VerificationTokenGetPayload<T> | undefined>;
+            return (await _mutation.mutateAsync(args, options as any)) as
+                | CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>>
+                | undefined;
         },
     };
+    return mutation;
 }
 
-export function useFindManyVerificationToken<T extends Prisma.VerificationTokenFindManyArgs>(
-    args?: Prisma.SelectSubset<T, Prisma.VerificationTokenFindManyArgs>,
-    options?: QueryOptions<Array<Prisma.VerificationTokenGetPayload<T> & { $optimistic?: boolean }>>,
+export function useFindManyVerificationToken<
+    TArgs extends Prisma.VerificationTokenFindManyArgs,
+    TQueryFnData = Array<Prisma.VerificationTokenGetPayload<TArgs> & { $optimistic?: boolean }>,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindManyArgs>,
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    optimisticUpdate: boolean = true,
 ) {
-    return request.useModelQuery('VerificationToken', 'findMany', args, options);
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findMany`,
+        args,
+        options,
+        fetch,
+        optimisticUpdate,
+    );
 }
 
 export function useInfiniteFindManyVerificationToken<
-    T extends Prisma.VerificationTokenFindManyArgs,
-    R extends Array<Prisma.VerificationTokenGetPayload<T>>,
+    TArgs extends Prisma.VerificationTokenFindManyArgs,
+    TQueryFnData = Array<Prisma.VerificationTokenGetPayload<TArgs>>,
+    TData = TQueryFnData,
+    TError = DefaultError,
 >(
-    getNextArgs: GetNextArgs<Prisma.SelectSubset<T, Prisma.VerificationTokenFindManyArgs> | undefined, R>,
-    options?: InfiniteQueryOptions<Array<Prisma.VerificationTokenGetPayload<T>>>,
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindManyArgs>,
+    options?: Omit<UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>, 'queryKey'>,
 ) {
-    return request.useInfiniteModelQuery('VerificationToken', 'findMany', getNextArgs, options);
+    options = options ?? { initialPageParam: undefined, getNextPageParam: () => null };
+    const { endpoint, fetch } = getHooksContext();
+    return useInfiniteModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findMany`,
+        args,
+        options,
+        fetch,
+    );
 }
 
-export function useFindUniqueVerificationToken<T extends Prisma.VerificationTokenFindUniqueArgs>(
-    args?: Prisma.SelectSubset<T, Prisma.VerificationTokenFindUniqueArgs>,
-    options?: QueryOptions<Prisma.VerificationTokenGetPayload<T> & { $optimistic?: boolean }>,
+export function useSuspenseFindManyVerificationToken<
+    TArgs extends Prisma.VerificationTokenFindManyArgs,
+    TQueryFnData = Array<Prisma.VerificationTokenGetPayload<TArgs> & { $optimistic?: boolean }>,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindManyArgs>,
+    options?: Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    optimisticUpdate: boolean = true,
 ) {
-    return request.useModelQuery('VerificationToken', 'findUnique', args, options);
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findMany`,
+        args,
+        options,
+        fetch,
+        optimisticUpdate,
+    );
 }
 
-export function useFindFirstVerificationToken<T extends Prisma.VerificationTokenFindFirstArgs>(
-    args?: Prisma.SelectSubset<T, Prisma.VerificationTokenFindFirstArgs>,
-    options?: QueryOptions<Prisma.VerificationTokenGetPayload<T> & { $optimistic?: boolean }>,
+export function useSuspenseInfiniteFindManyVerificationToken<
+    TArgs extends Prisma.VerificationTokenFindManyArgs,
+    TQueryFnData = Array<Prisma.VerificationTokenGetPayload<TArgs>>,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindManyArgs>,
+    options?: Omit<UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>, 'queryKey'>,
 ) {
-    return request.useModelQuery('VerificationToken', 'findFirst', args, options);
+    options = options ?? { initialPageParam: undefined, getNextPageParam: () => null };
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findMany`,
+        args,
+        options,
+        fetch,
+    );
+}
+
+export function useFindUniqueVerificationToken<
+    TArgs extends Prisma.VerificationTokenFindUniqueArgs,
+    TQueryFnData = Prisma.VerificationTokenGetPayload<TArgs> & { $optimistic?: boolean },
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindUniqueArgs>,
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    optimisticUpdate: boolean = true,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findUnique`,
+        args,
+        options,
+        fetch,
+        optimisticUpdate,
+    );
+}
+
+export function useSuspenseFindUniqueVerificationToken<
+    TArgs extends Prisma.VerificationTokenFindUniqueArgs,
+    TQueryFnData = Prisma.VerificationTokenGetPayload<TArgs> & { $optimistic?: boolean },
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindUniqueArgs>,
+    options?: Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    optimisticUpdate: boolean = true,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findUnique`,
+        args,
+        options,
+        fetch,
+        optimisticUpdate,
+    );
+}
+
+export function useFindFirstVerificationToken<
+    TArgs extends Prisma.VerificationTokenFindFirstArgs,
+    TQueryFnData = Prisma.VerificationTokenGetPayload<TArgs> & { $optimistic?: boolean },
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindFirstArgs>,
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    optimisticUpdate: boolean = true,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findFirst`,
+        args,
+        options,
+        fetch,
+        optimisticUpdate,
+    );
+}
+
+export function useSuspenseFindFirstVerificationToken<
+    TArgs extends Prisma.VerificationTokenFindFirstArgs,
+    TQueryFnData = Prisma.VerificationTokenGetPayload<TArgs> & { $optimistic?: boolean },
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenFindFirstArgs>,
+    options?: Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    optimisticUpdate: boolean = true,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/findFirst`,
+        args,
+        options,
+        fetch,
+        optimisticUpdate,
+    );
 }
 
 export function useUpdateVerificationToken(
-    options?: MutationOptions<
-        Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenUpdateArgs> | undefined,
-        unknown,
-        Prisma.VerificationTokenUpdateArgs
+    options?: Omit<
+        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenUpdateArgs>,
+        'mutationFn'
     >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
 ) {
-    const mutation = request.useModelMutation('VerificationToken', 'PUT', 'update', metadata, options, true);
-    return {
-        ...mutation,
-        trigger: <T extends Prisma.VerificationTokenUpdateArgs>(
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.VerificationTokenUpdateArgs, VerificationToken, true>(
+        'VerificationToken',
+        'PUT',
+        `${endpoint}/verificationToken/update`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        true,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.VerificationTokenUpdateArgs>(
             args: Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
+                    unknown,
+                    Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateArgs>
+                >,
+                'mutationFn'
+            >,
         ) => {
-            return mutation.trigger(args, options as any) as Promise<Prisma.VerificationTokenGetPayload<T> | undefined>;
+            return (await _mutation.mutateAsync(args, options as any)) as
+                | CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>>
+                | undefined;
         },
     };
+    return mutation;
 }
 
 export function useUpdateManyVerificationToken(
-    options?: MutationOptions<Prisma.BatchPayload, unknown, Prisma.VerificationTokenUpdateManyArgs>,
+    options?: Omit<
+        UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.VerificationTokenUpdateManyArgs>,
+        'mutationFn'
+    >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
 ) {
-    const mutation = request.useModelMutation('VerificationToken', 'PUT', 'updateMany', metadata, options, false);
-    return {
-        ...mutation,
-        trigger: <T extends Prisma.VerificationTokenUpdateManyArgs>(
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.VerificationTokenUpdateManyArgs, Prisma.BatchPayload, false>(
+        'VerificationToken',
+        'PUT',
+        `${endpoint}/verificationToken/updateMany`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        false,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.VerificationTokenUpdateManyArgs>(
             args: Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateManyArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    Prisma.BatchPayload,
+                    unknown,
+                    Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateManyArgs>
+                >,
+                'mutationFn'
+            >,
         ) => {
-            return mutation.trigger(args, options as any) as Promise<Prisma.BatchPayload>;
+            return (await _mutation.mutateAsync(args, options as any)) as Prisma.BatchPayload;
         },
     };
+    return mutation;
 }
 
 export function useUpsertVerificationToken(
-    options?: MutationOptions<
-        Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenUpsertArgs> | undefined,
-        unknown,
-        Prisma.VerificationTokenUpsertArgs
+    options?: Omit<
+        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenUpsertArgs>,
+        'mutationFn'
     >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
 ) {
-    const mutation = request.useModelMutation('VerificationToken', 'POST', 'upsert', metadata, options, true);
-    return {
-        ...mutation,
-        trigger: <T extends Prisma.VerificationTokenUpsertArgs>(
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.VerificationTokenUpsertArgs, VerificationToken, true>(
+        'VerificationToken',
+        'POST',
+        `${endpoint}/verificationToken/upsert`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        true,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.VerificationTokenUpsertArgs>(
             args: Prisma.SelectSubset<T, Prisma.VerificationTokenUpsertArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
+                    unknown,
+                    Prisma.SelectSubset<T, Prisma.VerificationTokenUpsertArgs>
+                >,
+                'mutationFn'
+            >,
         ) => {
-            return mutation.trigger(args, options as any) as Promise<Prisma.VerificationTokenGetPayload<T> | undefined>;
+            return (await _mutation.mutateAsync(args, options as any)) as
+                | CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>>
+                | undefined;
         },
     };
+    return mutation;
 }
 
 export function useDeleteVerificationToken(
-    options?: MutationOptions<
-        Prisma.VerificationTokenGetPayload<Prisma.VerificationTokenDeleteArgs> | undefined,
-        unknown,
-        Prisma.VerificationTokenDeleteArgs
+    options?: Omit<
+        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenDeleteArgs>,
+        'mutationFn'
     >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
 ) {
-    const mutation = request.useModelMutation('VerificationToken', 'DELETE', 'delete', metadata, options, true);
-    return {
-        ...mutation,
-        trigger: <T extends Prisma.VerificationTokenDeleteArgs>(
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.VerificationTokenDeleteArgs, VerificationToken, true>(
+        'VerificationToken',
+        'DELETE',
+        `${endpoint}/verificationToken/delete`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        true,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.VerificationTokenDeleteArgs>(
             args: Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
+                    unknown,
+                    Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteArgs>
+                >,
+                'mutationFn'
+            >,
         ) => {
-            return mutation.trigger(args, options as any) as Promise<Prisma.VerificationTokenGetPayload<T> | undefined>;
+            return (await _mutation.mutateAsync(args, options as any)) as
+                | CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>>
+                | undefined;
         },
     };
+    return mutation;
 }
 
 export function useDeleteManyVerificationToken(
-    options?: MutationOptions<Prisma.BatchPayload, unknown, Prisma.VerificationTokenDeleteManyArgs>,
+    options?: Omit<
+        UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.VerificationTokenDeleteManyArgs>,
+        'mutationFn'
+    >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
 ) {
-    const mutation = request.useModelMutation('VerificationToken', 'DELETE', 'deleteMany', metadata, options, false);
-    return {
-        ...mutation,
-        trigger: <T extends Prisma.VerificationTokenDeleteManyArgs>(
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.VerificationTokenDeleteManyArgs, Prisma.BatchPayload, false>(
+        'VerificationToken',
+        'DELETE',
+        `${endpoint}/verificationToken/deleteMany`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        false,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.VerificationTokenDeleteManyArgs>(
             args: Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteManyArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    Prisma.BatchPayload,
+                    unknown,
+                    Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteManyArgs>
+                >,
+                'mutationFn'
+            >,
         ) => {
-            return mutation.trigger(args, options as any) as Promise<Prisma.BatchPayload>;
+            return (await _mutation.mutateAsync(args, options as any)) as Prisma.BatchPayload;
         },
     };
+    return mutation;
 }
 
-export function useAggregateVerificationToken<T extends Prisma.VerificationTokenAggregateArgs>(
-    args?: Prisma.Subset<T, Prisma.VerificationTokenAggregateArgs>,
-    options?: QueryOptions<Prisma.GetVerificationTokenAggregateType<T>>,
+export function useAggregateVerificationToken<
+    TArgs extends Prisma.VerificationTokenAggregateArgs,
+    TQueryFnData = Prisma.GetVerificationTokenAggregateType<TArgs>,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenAggregateArgs>,
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
 ) {
-    return request.useModelQuery('VerificationToken', 'aggregate', args, options);
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/aggregate`,
+        args,
+        options,
+        fetch,
+    );
+}
+
+export function useSuspenseAggregateVerificationToken<
+    TArgs extends Prisma.VerificationTokenAggregateArgs,
+    TQueryFnData = Prisma.GetVerificationTokenAggregateType<TArgs>,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenAggregateArgs>,
+    options?: Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/aggregate`,
+        args,
+        options,
+        fetch,
+    );
 }
 
 export function useGroupByVerificationToken<
-    T extends Prisma.VerificationTokenGroupByArgs,
-    HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>,
+    TArgs extends Prisma.VerificationTokenGroupByArgs,
+    HasSelectOrTake extends Prisma.Or<
+        Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
+        Prisma.Extends<'take', Prisma.Keys<TArgs>>
+    >,
     OrderByArg extends Prisma.True extends HasSelectOrTake
         ? { orderBy: Prisma.VerificationTokenGroupByArgs['orderBy'] }
         : { orderBy?: Prisma.VerificationTokenGroupByArgs['orderBy'] },
-    OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
-    ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
+    OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>>,
+    ByFields extends Prisma.MaybeTupleToUnion<TArgs['by']>,
     ByValid extends Prisma.Has<ByFields, OrderFields>,
-    HavingFields extends Prisma.GetHavingFields<T['having']>,
+    HavingFields extends Prisma.GetHavingFields<TArgs['having']>,
     HavingValid extends Prisma.Has<ByFields, HavingFields>,
-    ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False,
+    ByEmpty extends TArgs['by'] extends never[] ? Prisma.True : Prisma.False,
     InputErrors extends ByEmpty extends Prisma.True
         ? `Error: "by" must not be empty.`
         : HavingValid extends Prisma.False
-        ? {
-              [P in HavingFields]: P extends ByFields
-                  ? never
-                  : P extends string
-                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
-          }[HavingFields]
-        : 'take' extends Prisma.Keys<T>
-        ? 'orderBy' extends Prisma.Keys<T>
-            ? ByValid extends Prisma.True
+          ? {
+                [P in HavingFields]: P extends ByFields
+                    ? never
+                    : P extends string
+                      ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                      : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Prisma.Keys<TArgs>
+            ? 'orderBy' extends Prisma.Keys<TArgs>
+                ? ByValid extends Prisma.True
+                    ? {}
+                    : {
+                          [P in OrderFields]: P extends ByFields
+                              ? never
+                              : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                      }[OrderFields]
+                : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Prisma.Keys<TArgs>
+              ? 'orderBy' extends Prisma.Keys<TArgs>
+                  ? ByValid extends Prisma.True
+                      ? {}
+                      : {
+                            [P in OrderFields]: P extends ByFields
+                                ? never
+                                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                        }[OrderFields]
+                  : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends Prisma.True
                 ? {}
                 : {
                       [P in OrderFields]: P extends ByFields
                           ? never
                           : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
-                  }[OrderFields]
-            : 'Error: If you provide "take", you also need to provide "orderBy"'
-        : 'skip' extends Prisma.Keys<T>
-        ? 'orderBy' extends Prisma.Keys<T>
-            ? ByValid extends Prisma.True
-                ? {}
-                : {
-                      [P in OrderFields]: P extends ByFields
-                          ? never
-                          : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
-                  }[OrderFields]
-            : 'Error: If you provide "skip", you also need to provide "orderBy"'
-        : ByValid extends Prisma.True
-        ? {}
-        : {
-              [P in OrderFields]: P extends ByFields
-                  ? never
-                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
-          }[OrderFields],
+                  }[OrderFields],
+    TQueryFnData = {} extends InputErrors
+        ? Array<
+              PickEnumerable<Prisma.VerificationTokenGroupByOutputType, TArgs['by']> & {
+                  [P in keyof TArgs & keyof Prisma.VerificationTokenGroupByOutputType]: P extends '_count'
+                      ? TArgs[P] extends boolean
+                          ? number
+                          : Prisma.GetScalarType<TArgs[P], Prisma.VerificationTokenGroupByOutputType[P]>
+                      : Prisma.GetScalarType<TArgs[P], Prisma.VerificationTokenGroupByOutputType[P]>;
+              }
+          >
+        : InputErrors,
+    TData = TQueryFnData,
+    TError = DefaultError,
 >(
-    args?: Prisma.SubsetIntersection<T, Prisma.VerificationTokenGroupByArgs, OrderByArg> & InputErrors,
-    options?: QueryOptions<
-        {} extends InputErrors
-            ? Array<
-                  PickEnumerable<Prisma.VerificationTokenGroupByOutputType, T['by']> & {
-                      [P in keyof T & keyof Prisma.VerificationTokenGroupByOutputType]: P extends '_count'
-                          ? T[P] extends boolean
-                              ? number
-                              : Prisma.GetScalarType<T[P], Prisma.VerificationTokenGroupByOutputType[P]>
-                          : Prisma.GetScalarType<T[P], Prisma.VerificationTokenGroupByOutputType[P]>;
-                  }
-              >
-            : InputErrors
+    args: Prisma.SelectSubset<
+        TArgs,
+        Prisma.SubsetIntersection<TArgs, Prisma.VerificationTokenGroupByArgs, OrderByArg> & InputErrors
     >,
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
 ) {
-    return request.useModelQuery('VerificationToken', 'groupBy', args, options);
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/groupBy`,
+        args,
+        options,
+        fetch,
+    );
 }
 
-export function useCountVerificationToken<T extends Prisma.VerificationTokenCountArgs>(
-    args?: Prisma.Subset<T, Prisma.VerificationTokenCountArgs>,
-    options?: QueryOptions<
-        T extends { select: any }
-            ? T['select'] extends true
-                ? number
-                : Prisma.GetScalarType<T['select'], Prisma.VerificationTokenCountAggregateOutputType>
-            : number
+export function useSuspenseGroupByVerificationToken<
+    TArgs extends Prisma.VerificationTokenGroupByArgs,
+    HasSelectOrTake extends Prisma.Or<
+        Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
+        Prisma.Extends<'take', Prisma.Keys<TArgs>>
     >,
+    OrderByArg extends Prisma.True extends HasSelectOrTake
+        ? { orderBy: Prisma.VerificationTokenGroupByArgs['orderBy'] }
+        : { orderBy?: Prisma.VerificationTokenGroupByArgs['orderBy'] },
+    OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>>,
+    ByFields extends Prisma.MaybeTupleToUnion<TArgs['by']>,
+    ByValid extends Prisma.Has<ByFields, OrderFields>,
+    HavingFields extends Prisma.GetHavingFields<TArgs['having']>,
+    HavingValid extends Prisma.Has<ByFields, HavingFields>,
+    ByEmpty extends TArgs['by'] extends never[] ? Prisma.True : Prisma.False,
+    InputErrors extends ByEmpty extends Prisma.True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends Prisma.False
+          ? {
+                [P in HavingFields]: P extends ByFields
+                    ? never
+                    : P extends string
+                      ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                      : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Prisma.Keys<TArgs>
+            ? 'orderBy' extends Prisma.Keys<TArgs>
+                ? ByValid extends Prisma.True
+                    ? {}
+                    : {
+                          [P in OrderFields]: P extends ByFields
+                              ? never
+                              : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                      }[OrderFields]
+                : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Prisma.Keys<TArgs>
+              ? 'orderBy' extends Prisma.Keys<TArgs>
+                  ? ByValid extends Prisma.True
+                      ? {}
+                      : {
+                            [P in OrderFields]: P extends ByFields
+                                ? never
+                                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                        }[OrderFields]
+                  : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends Prisma.True
+                ? {}
+                : {
+                      [P in OrderFields]: P extends ByFields
+                          ? never
+                          : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    TQueryFnData = {} extends InputErrors
+        ? Array<
+              PickEnumerable<Prisma.VerificationTokenGroupByOutputType, TArgs['by']> & {
+                  [P in keyof TArgs & keyof Prisma.VerificationTokenGroupByOutputType]: P extends '_count'
+                      ? TArgs[P] extends boolean
+                          ? number
+                          : Prisma.GetScalarType<TArgs[P], Prisma.VerificationTokenGroupByOutputType[P]>
+                      : Prisma.GetScalarType<TArgs[P], Prisma.VerificationTokenGroupByOutputType[P]>;
+              }
+          >
+        : InputErrors,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args: Prisma.SelectSubset<
+        TArgs,
+        Prisma.SubsetIntersection<TArgs, Prisma.VerificationTokenGroupByArgs, OrderByArg> & InputErrors
+    >,
+    options?: Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
 ) {
-    return request.useModelQuery('VerificationToken', 'count', args, options);
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/groupBy`,
+        args,
+        options,
+        fetch,
+    );
+}
+
+export function useCountVerificationToken<
+    TArgs extends Prisma.VerificationTokenCountArgs,
+    TQueryFnData = TArgs extends { select: any }
+        ? TArgs['select'] extends true
+            ? number
+            : Prisma.GetScalarType<TArgs['select'], Prisma.VerificationTokenCountAggregateOutputType>
+        : number,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenCountArgs>,
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/count`,
+        args,
+        options,
+        fetch,
+    );
+}
+
+export function useSuspenseCountVerificationToken<
+    TArgs extends Prisma.VerificationTokenCountArgs,
+    TQueryFnData = TArgs extends { select: any }
+        ? TArgs['select'] extends true
+            ? number
+            : Prisma.GetScalarType<TArgs['select'], Prisma.VerificationTokenCountAggregateOutputType>
+        : number,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.VerificationTokenCountArgs>,
+    options?: Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>(
+        'VerificationToken',
+        `${endpoint}/verificationToken/count`,
+        args,
+        options,
+        fetch,
+    );
 }

@@ -2,7 +2,6 @@
 
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
@@ -30,7 +29,10 @@ const Signin: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
       <h1 className="text-5xl font-extrabold text-white">Login</h1>
-      <form className="mt-16 flex flex-col gap-8 text-2xl" onSubmit={onSignin}>
+      <form
+        className="mt-16 flex flex-col gap-8 text-2xl"
+        onSubmit={(e) => void onSignin(e)}
+      >
         <div>
           <label htmlFor="email" className="inline-block w-32  text-white">
             Email
@@ -61,13 +63,6 @@ const Signin: NextPage = () => {
           className="cursor-pointer rounded border border-gray-500 py-4 text-white"
         />
       </form>
-      <div className="mt-2 text-base font-medium text-gray-300">
-        Don&apos;t have an account yet?{" "}
-        <Link href="/signup" className="text-primary-700 underline">
-          {" "}
-          Signup here{" "}
-        </Link>
-      </div>
     </div>
   );
 };

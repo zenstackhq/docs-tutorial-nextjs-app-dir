@@ -1,11 +1,14 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
+import "~/styles/globals.css";
+
 import { Inter } from "next/font/google";
+import Providers from "./providers";
 
-import "../styles/globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export default function RootLayout({
   children,
@@ -14,8 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
+      <body className={`font-sans ${inter.variable}`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
