@@ -1,14 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { PrismaClient } from "@prisma/client";
-import { compare } from "bcryptjs";
-import {
-  getServerSession,
-  type DefaultSession,
-  type NextAuthOptions,
-} from "next-auth";
+import { compareSync } from "bcryptjs";
+import NextAuth, { type DefaultSession, type NextAuthConfig } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
-
 import { db } from "~/server/db";
 
 /**
@@ -30,7 +25,7 @@ declare module "next-auth" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
-export const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthConfig = {
   session: {
     strategy: "jwt",
   },
@@ -66,28 +61,27 @@ export const authOptions: NextAuthOptions = {
 
 function authorize(prisma: PrismaClient) {
   return async (
-    credentials: Record<"email" | "password", string> | undefined,
+    credentials: Partial<Record<"email" | "password", unknown>>,
   ) => {
-    if (!credentials) throw new Error("Missing credentials");
-    if (!credentials.email)
+    if (!credentials.email || typeof credentials.email !== "string")
       throw new Error('"email" is required in credentials');
-    if (!credentials.password)
+    if (!credentials.password || typeof credentials.password !== "string")
       throw new Error('"password" is required in credentials');
+
     const maybeUser = await prisma.user.findFirst({
       where: { email: credentials.email },
       select: { id: true, email: true, password: true },
     });
     if (!maybeUser?.password) return null;
+
     // verify the input password with stored hash
-    const isValid = await compare(credentials.password, maybeUser.password);
+    const isValid = compareSync(credentials.password, maybeUser.password);
     if (!isValid) return null;
     return { id: maybeUser.id, email: maybeUser.email };
   };
 }
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions);
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth(authOptions);
