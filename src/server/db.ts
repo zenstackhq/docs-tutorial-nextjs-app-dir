@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { env } from "~/env";
 
 const createPrismaClient = () => {
-  const pool = new Pool({ connectionString: env.DATABASE_URL });
+  const pool = new Pool({ connectionString: env.DATABASE_PRISMA_URL });
   const adapter = new PrismaNeon(pool);
   const prisma = new PrismaClient({ adapter, log: ["error", "warn", "info"] });
   return prisma;
