@@ -11,15 +11,15 @@
     "lint": "next lint",
     "start": "next start",
     "package-clean": "npm rm @zenstackhq/runtime @zenstackhq/server zenstack @zenstackhq/tanstack-query",
-    "up": "npm run package-clean && npm i --save-exact @zenstackhq/runtime@latest @zenstackhq/server@latest && npm i -D --save-exact zenstack@latest @zenstackhq/tanstack-query@latest"
+    "up": "npm run package-clean && npm i --save-exact @zenstackhq/runtime@next @zenstackhq/server@next && npm i -D --save-exact zenstack@next @zenstackhq/tanstack-query@next"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.4.0",
     "@prisma/client": "^5.10.2",
     "@t3-oss/env-nextjs": "^0.9.2",
     "@tanstack/react-query": "^5.24.1",
-    "@zenstackhq/runtime": "1.12.0",
-    "@zenstackhq/server": "1.12.0",
+    "@zenstackhq/runtime": "2.0.0-beta.10",
+    "@zenstackhq/server": "2.0.0-beta.10",
     "next": "^14.1.0",
     "next-auth": "^4.24.6",
     "react": "18.2.0",
@@ -27,22 +27,23 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",
-    "@typescript-eslint/eslint-plugin": "^7.0.2",
-    "@typescript-eslint/parser": "^7.0.2",
-    "@zenstackhq/tanstack-query": "1.12.0",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^14.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
+    "@zenstackhq/tanstack-query": "2.0.0-beta.10",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.1.4",
     "postcss": "^8.4.34",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "prisma": "^5.10.2",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3",
-    "zenstack": "1.12.0"
+    "typescript": "^5.4.5",
+    "zenstack": "2.0.0-beta.10"
   },
   "ct3aMetadata": {
     "initVersion": "7.28.0"

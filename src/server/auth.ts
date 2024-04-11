@@ -36,9 +36,8 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session({ session, token }) {
-      if (session.user) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        session.user.id = token.sub!;
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
       return session;
     },
