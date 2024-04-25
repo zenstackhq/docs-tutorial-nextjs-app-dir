@@ -3,19 +3,19 @@ import type { Prisma, Session } from '@prisma/client';
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
-import type { PickEnumerable, CheckSelect } from '@zenstackhq/tanstack-query/runtime-v5';
+import type { PickEnumerable, CheckSelect, QueryError } from '@zenstackhq/tanstack-query/runtime-v5';
 import metadata from './__model_meta';
-type DefaultError = Error;
+type DefaultError = QueryError;
 import { useSuspenseModelQuery, useSuspenseInfiniteModelQuery } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import type { UseSuspenseQueryOptions, UseSuspenseInfiniteQueryOptions } from '@tanstack/react-query';
 
 export function useCreateSession(
-    options?: Omit<UseMutationOptions<Session | undefined, unknown, Prisma.SessionCreateArgs>, 'mutationFn'>,
+    options?: Omit<UseMutationOptions<Session | undefined, DefaultError, Prisma.SessionCreateArgs>, 'mutationFn'>,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.SessionCreateArgs, Session, true>(
+    const _mutation = useModelMutation<Prisma.SessionCreateArgs, DefaultError, Session, true>(
         'Session',
         'POST',
         `${endpoint}/session/create`,
@@ -33,7 +33,7 @@ export function useCreateSession(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, Session, Prisma.SessionGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.SessionCreateArgs>
                 >,
                 'mutationFn'
@@ -42,6 +42,42 @@ export function useCreateSession(
             return (await _mutation.mutateAsync(args, options as any)) as
                 | CheckSelect<T, Session, Prisma.SessionGetPayload<T>>
                 | undefined;
+        },
+    };
+    return mutation;
+}
+
+export function useCreateManySession(
+    options?: Omit<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.SessionCreateManyArgs>, 'mutationFn'>,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.SessionCreateManyArgs, DefaultError, Prisma.BatchPayload, false>(
+        'Session',
+        'POST',
+        `${endpoint}/session/createMany`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        false,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.SessionCreateManyArgs>(
+            args: Prisma.SelectSubset<T, Prisma.SessionCreateManyArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    Prisma.BatchPayload,
+                    DefaultError,
+                    Prisma.SelectSubset<T, Prisma.SessionCreateManyArgs>
+                >,
+                'mutationFn'
+            >,
+        ) => {
+            return (await _mutation.mutateAsync(args, options as any)) as Prisma.BatchPayload;
         },
     };
     return mutation;
@@ -214,12 +250,12 @@ export function useSuspenseFindFirstSession<
 }
 
 export function useUpdateSession(
-    options?: Omit<UseMutationOptions<Session | undefined, unknown, Prisma.SessionUpdateArgs>, 'mutationFn'>,
+    options?: Omit<UseMutationOptions<Session | undefined, DefaultError, Prisma.SessionUpdateArgs>, 'mutationFn'>,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.SessionUpdateArgs, Session, true>(
+    const _mutation = useModelMutation<Prisma.SessionUpdateArgs, DefaultError, Session, true>(
         'Session',
         'PUT',
         `${endpoint}/session/update`,
@@ -237,7 +273,7 @@ export function useUpdateSession(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, Session, Prisma.SessionGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.SessionUpdateArgs>
                 >,
                 'mutationFn'
@@ -252,12 +288,12 @@ export function useUpdateSession(
 }
 
 export function useUpdateManySession(
-    options?: Omit<UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.SessionUpdateManyArgs>, 'mutationFn'>,
+    options?: Omit<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.SessionUpdateManyArgs>, 'mutationFn'>,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.SessionUpdateManyArgs, Prisma.BatchPayload, false>(
+    const _mutation = useModelMutation<Prisma.SessionUpdateManyArgs, DefaultError, Prisma.BatchPayload, false>(
         'Session',
         'PUT',
         `${endpoint}/session/updateMany`,
@@ -273,7 +309,11 @@ export function useUpdateManySession(
         mutateAsync: async <T extends Prisma.SessionUpdateManyArgs>(
             args: Prisma.SelectSubset<T, Prisma.SessionUpdateManyArgs>,
             options?: Omit<
-                UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.SelectSubset<T, Prisma.SessionUpdateManyArgs>>,
+                UseMutationOptions<
+                    Prisma.BatchPayload,
+                    DefaultError,
+                    Prisma.SelectSubset<T, Prisma.SessionUpdateManyArgs>
+                >,
                 'mutationFn'
             >,
         ) => {
@@ -284,12 +324,12 @@ export function useUpdateManySession(
 }
 
 export function useUpsertSession(
-    options?: Omit<UseMutationOptions<Session | undefined, unknown, Prisma.SessionUpsertArgs>, 'mutationFn'>,
+    options?: Omit<UseMutationOptions<Session | undefined, DefaultError, Prisma.SessionUpsertArgs>, 'mutationFn'>,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.SessionUpsertArgs, Session, true>(
+    const _mutation = useModelMutation<Prisma.SessionUpsertArgs, DefaultError, Session, true>(
         'Session',
         'POST',
         `${endpoint}/session/upsert`,
@@ -307,7 +347,7 @@ export function useUpsertSession(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, Session, Prisma.SessionGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.SessionUpsertArgs>
                 >,
                 'mutationFn'
@@ -322,12 +362,12 @@ export function useUpsertSession(
 }
 
 export function useDeleteSession(
-    options?: Omit<UseMutationOptions<Session | undefined, unknown, Prisma.SessionDeleteArgs>, 'mutationFn'>,
+    options?: Omit<UseMutationOptions<Session | undefined, DefaultError, Prisma.SessionDeleteArgs>, 'mutationFn'>,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.SessionDeleteArgs, Session, true>(
+    const _mutation = useModelMutation<Prisma.SessionDeleteArgs, DefaultError, Session, true>(
         'Session',
         'DELETE',
         `${endpoint}/session/delete`,
@@ -345,7 +385,7 @@ export function useDeleteSession(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, Session, Prisma.SessionGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.SessionDeleteArgs>
                 >,
                 'mutationFn'
@@ -360,12 +400,12 @@ export function useDeleteSession(
 }
 
 export function useDeleteManySession(
-    options?: Omit<UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.SessionDeleteManyArgs>, 'mutationFn'>,
+    options?: Omit<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.SessionDeleteManyArgs>, 'mutationFn'>,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.SessionDeleteManyArgs, Prisma.BatchPayload, false>(
+    const _mutation = useModelMutation<Prisma.SessionDeleteManyArgs, DefaultError, Prisma.BatchPayload, false>(
         'Session',
         'DELETE',
         `${endpoint}/session/deleteMany`,
@@ -381,7 +421,11 @@ export function useDeleteManySession(
         mutateAsync: async <T extends Prisma.SessionDeleteManyArgs>(
             args: Prisma.SelectSubset<T, Prisma.SessionDeleteManyArgs>,
             options?: Omit<
-                UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.SelectSubset<T, Prisma.SessionDeleteManyArgs>>,
+                UseMutationOptions<
+                    Prisma.BatchPayload,
+                    DefaultError,
+                    Prisma.SelectSubset<T, Prisma.SessionDeleteManyArgs>
+                >,
                 'mutationFn'
             >,
         ) => {

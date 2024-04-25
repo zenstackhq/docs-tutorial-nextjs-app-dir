@@ -3,22 +3,22 @@ import type { Prisma, VerificationToken } from '@prisma/client';
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
-import type { PickEnumerable, CheckSelect } from '@zenstackhq/tanstack-query/runtime-v5';
+import type { PickEnumerable, CheckSelect, QueryError } from '@zenstackhq/tanstack-query/runtime-v5';
 import metadata from './__model_meta';
-type DefaultError = Error;
+type DefaultError = QueryError;
 import { useSuspenseModelQuery, useSuspenseInfiniteModelQuery } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import type { UseSuspenseQueryOptions, UseSuspenseInfiniteQueryOptions } from '@tanstack/react-query';
 
 export function useCreateVerificationToken(
     options?: Omit<
-        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenCreateArgs>,
+        UseMutationOptions<VerificationToken | undefined, DefaultError, Prisma.VerificationTokenCreateArgs>,
         'mutationFn'
     >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.VerificationTokenCreateArgs, VerificationToken, true>(
+    const _mutation = useModelMutation<Prisma.VerificationTokenCreateArgs, DefaultError, VerificationToken, true>(
         'VerificationToken',
         'POST',
         `${endpoint}/verificationToken/create`,
@@ -36,7 +36,7 @@ export function useCreateVerificationToken(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.VerificationTokenCreateArgs>
                 >,
                 'mutationFn'
@@ -45,6 +45,50 @@ export function useCreateVerificationToken(
             return (await _mutation.mutateAsync(args, options as any)) as
                 | CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>>
                 | undefined;
+        },
+    };
+    return mutation;
+}
+
+export function useCreateManyVerificationToken(
+    options?: Omit<
+        UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.VerificationTokenCreateManyArgs>,
+        'mutationFn'
+    >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<
+        Prisma.VerificationTokenCreateManyArgs,
+        DefaultError,
+        Prisma.BatchPayload,
+        false
+    >(
+        'VerificationToken',
+        'POST',
+        `${endpoint}/verificationToken/createMany`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        false,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.VerificationTokenCreateManyArgs>(
+            args: Prisma.SelectSubset<T, Prisma.VerificationTokenCreateManyArgs>,
+            options?: Omit<
+                UseMutationOptions<
+                    Prisma.BatchPayload,
+                    DefaultError,
+                    Prisma.SelectSubset<T, Prisma.VerificationTokenCreateManyArgs>
+                >,
+                'mutationFn'
+            >,
+        ) => {
+            return (await _mutation.mutateAsync(args, options as any)) as Prisma.BatchPayload;
         },
     };
     return mutation;
@@ -218,14 +262,14 @@ export function useSuspenseFindFirstVerificationToken<
 
 export function useUpdateVerificationToken(
     options?: Omit<
-        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenUpdateArgs>,
+        UseMutationOptions<VerificationToken | undefined, DefaultError, Prisma.VerificationTokenUpdateArgs>,
         'mutationFn'
     >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.VerificationTokenUpdateArgs, VerificationToken, true>(
+    const _mutation = useModelMutation<Prisma.VerificationTokenUpdateArgs, DefaultError, VerificationToken, true>(
         'VerificationToken',
         'PUT',
         `${endpoint}/verificationToken/update`,
@@ -243,7 +287,7 @@ export function useUpdateVerificationToken(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateArgs>
                 >,
                 'mutationFn'
@@ -259,14 +303,19 @@ export function useUpdateVerificationToken(
 
 export function useUpdateManyVerificationToken(
     options?: Omit<
-        UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.VerificationTokenUpdateManyArgs>,
+        UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.VerificationTokenUpdateManyArgs>,
         'mutationFn'
     >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.VerificationTokenUpdateManyArgs, Prisma.BatchPayload, false>(
+    const _mutation = useModelMutation<
+        Prisma.VerificationTokenUpdateManyArgs,
+        DefaultError,
+        Prisma.BatchPayload,
+        false
+    >(
         'VerificationToken',
         'PUT',
         `${endpoint}/verificationToken/updateMany`,
@@ -284,7 +333,7 @@ export function useUpdateManyVerificationToken(
             options?: Omit<
                 UseMutationOptions<
                     Prisma.BatchPayload,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateManyArgs>
                 >,
                 'mutationFn'
@@ -298,14 +347,14 @@ export function useUpdateManyVerificationToken(
 
 export function useUpsertVerificationToken(
     options?: Omit<
-        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenUpsertArgs>,
+        UseMutationOptions<VerificationToken | undefined, DefaultError, Prisma.VerificationTokenUpsertArgs>,
         'mutationFn'
     >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.VerificationTokenUpsertArgs, VerificationToken, true>(
+    const _mutation = useModelMutation<Prisma.VerificationTokenUpsertArgs, DefaultError, VerificationToken, true>(
         'VerificationToken',
         'POST',
         `${endpoint}/verificationToken/upsert`,
@@ -323,7 +372,7 @@ export function useUpsertVerificationToken(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.VerificationTokenUpsertArgs>
                 >,
                 'mutationFn'
@@ -339,14 +388,14 @@ export function useUpsertVerificationToken(
 
 export function useDeleteVerificationToken(
     options?: Omit<
-        UseMutationOptions<VerificationToken | undefined, unknown, Prisma.VerificationTokenDeleteArgs>,
+        UseMutationOptions<VerificationToken | undefined, DefaultError, Prisma.VerificationTokenDeleteArgs>,
         'mutationFn'
     >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.VerificationTokenDeleteArgs, VerificationToken, true>(
+    const _mutation = useModelMutation<Prisma.VerificationTokenDeleteArgs, DefaultError, VerificationToken, true>(
         'VerificationToken',
         'DELETE',
         `${endpoint}/verificationToken/delete`,
@@ -364,7 +413,7 @@ export function useDeleteVerificationToken(
             options?: Omit<
                 UseMutationOptions<
                     CheckSelect<T, VerificationToken, Prisma.VerificationTokenGetPayload<T>> | undefined,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteArgs>
                 >,
                 'mutationFn'
@@ -380,14 +429,19 @@ export function useDeleteVerificationToken(
 
 export function useDeleteManyVerificationToken(
     options?: Omit<
-        UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.VerificationTokenDeleteManyArgs>,
+        UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.VerificationTokenDeleteManyArgs>,
         'mutationFn'
     >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.VerificationTokenDeleteManyArgs, Prisma.BatchPayload, false>(
+    const _mutation = useModelMutation<
+        Prisma.VerificationTokenDeleteManyArgs,
+        DefaultError,
+        Prisma.BatchPayload,
+        false
+    >(
         'VerificationToken',
         'DELETE',
         `${endpoint}/verificationToken/deleteMany`,
@@ -405,7 +459,7 @@ export function useDeleteManyVerificationToken(
             options?: Omit<
                 UseMutationOptions<
                     Prisma.BatchPayload,
-                    unknown,
+                    DefaultError,
                     Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteManyArgs>
                 >,
                 'mutationFn'

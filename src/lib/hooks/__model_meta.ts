@@ -216,13 +216,13 @@ const metadata = {
             },
         },
         account: {
-            provider_providerAccountId: {
-                name: 'provider_providerAccountId',
-                fields: ['provider', 'providerAccountId'],
-            },
             id: {
                 name: 'id',
                 fields: ['id'],
+            },
+            provider_providerAccountId: {
+                name: 'provider_providerAccountId',
+                fields: ['provider', 'providerAccountId'],
             },
         },
         session: {
@@ -246,13 +246,13 @@ const metadata = {
             },
         },
         verificationToken: {
-            identifier_token: {
-                name: 'identifier_token',
-                fields: ['identifier', 'token'],
-            },
             token: {
                 name: 'token',
                 fields: ['token'],
+            },
+            identifier_token: {
+                name: 'identifier_token',
+                fields: ['identifier', 'token'],
             },
         },
     },
