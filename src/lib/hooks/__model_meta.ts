@@ -34,8 +34,10 @@ const metadata = {
                 }, createdById: {
                     name: "createdById",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
                     isForeignKey: true,
                     relationField: 'createdBy',
+                    defaultValueProvider: $default$Post$createdById,
                 },
             }
             , uniqueConstraints: {
@@ -106,12 +108,12 @@ const metadata = {
                 },
             }
             , uniqueConstraints: {
-                provider_providerAccountId: {
-                    name: "provider_providerAccountId",
-                    fields: ["provider", "providerAccountId"]
-                }, id: {
+                id: {
                     name: "id",
                     fields: ["id"]
+                }, provider_providerAccountId: {
+                    name: "provider_providerAccountId",
+                    fields: ["provider", "providerAccountId"]
                 },
             }
             ,
@@ -229,12 +231,12 @@ const metadata = {
                 },
             }
             , uniqueConstraints: {
-                identifier_token: {
-                    name: "identifier_token",
-                    fields: ["identifier", "token"]
-                }, token: {
+                token: {
                     name: "token",
                     fields: ["token"]
+                }, identifier_token: {
+                    name: "identifier_token",
+                    fields: ["identifier", "token"]
                 },
             }
             ,
@@ -248,4 +250,7 @@ const metadata = {
     ,
     authModel: 'User'
 };
+function $default$Post$createdById(user: any): unknown {
+    return user?.id;
+}
 export default metadata;

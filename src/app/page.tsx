@@ -46,7 +46,7 @@ const SigninSignup = () => {
   );
 };
 
-const Posts = ({ user }: { user: AuthUser }) => {
+const Posts = () => {
   // Post crud hooks
   const { mutateAsync: createPost } = useCreatePost();
   const { mutateAsync: updatePost } = useUpdatePost();
@@ -61,9 +61,7 @@ const Posts = ({ user }: { user: AuthUser }) => {
   async function onCreatePost() {
     const name = prompt("Enter post name");
     if (name) {
-      await createPost({
-        data: { name, createdBy: { connect: { id: user.id } } },
-      });
+      await createPost({ data: { name } });
     }
   }
 
@@ -127,7 +125,7 @@ const Home: NextPage = () => {
           <div className="flex flex-col">
             <Welcome user={session.user} />
             <section className="mt-10">
-              <Posts user={session.user} />
+              <Posts />
             </section>
           </div>
         ) : (
