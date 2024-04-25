@@ -11,7 +11,7 @@
     "lint": "next lint",
     "start": "next start",
     "package-clean": "npm rm @zenstackhq/runtime @zenstackhq/server zenstack @zenstackhq/tanstack-query",
-    "up": "npm run package-clean && npm i --save-exact @zenstackhq/runtime@next @zenstackhq/server@next && npm i -D --save-exact zenstack@next @zenstackhq/tanstack-query@next"
+    "up": "npm run package-clean && npm i --save-exact @zenstackhq/runtime@latest @zenstackhq/server@latest && npm i -D --save-exact zenstack@latest @zenstackhq/tanstack-query@latest"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.4.0",
