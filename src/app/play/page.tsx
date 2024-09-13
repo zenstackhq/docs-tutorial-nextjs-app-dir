@@ -3,104 +3,101 @@
 import { type NextPage } from "next";
 import { signOut } from "next-auth/react";
 
-const Home: NextPage = () => {
+const conversation = [
+  {
+    id: 1,
+    sender: "ai",
+    message: "Its over Anakin, I have the high ground.",
+  },
+  {
+    id: 2,
+    sender: "user",
+    message: "You underestimate my power!",
+  },
+  {
+    id: 3,
+    sender: "ai",
+    message: "Don't try it.",
+  },
+  {
+    id: 4,
+    sender: "user",
+    message: "You never knew my father.",
+  },
+  {
+    id: 5,
+    sender: "ai",
+    message: "I am your father.",
+  },
+];
+const Page: NextPage = () => {
   return (
-    <main className="h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container mx-auto h-full rounded-lg border px-4">
+    <main className="h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] py-4">
+      <div className="bg-base-content container mx-auto h-full rounded-lg border-2 border-gray-400">
         {/* ai chat window with input at bottom */}
-
-        <div className="flex h-full flex-col">
-          <div className="grow overflow-y-auto rounded-lg bg-gray-800">
-            <div className="">
-              <div className="p-4">
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
+        <div className="flex h-full flex-col rounded-lg ">
+          <div className="p-4 text-end">
+            <UserSettings />
+          </div>
+          <div className="grow overflow-y-auto">
+            <div className="p-4">
+              {conversation.map((chat) => (
+                <div
+                  key={chat.id}
+                  className={`chat ${
+                    chat.sender === "ai" ? "chat-start" : "chat-end"
+                  }`}
+                >
+                  <div className="chat-bubble">{chat.message}</div>
                 </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-                <div className="mb-4 rounded-lg bg-gray-700 p-4">
-                  <p className="text-sm">Hello, how can I help you?</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
-          <div className="p-4">
+          <div className="flex gap-4 p-4">
             <input
               type="text"
               className="w-full rounded-lg border border-gray-600 p-2"
               placeholder="Ask me anything..."
             />
+            <button className="btn btn-primary">send</button>
           </div>
         </div>
-
-        {/* <h1 className="text-5xl font-extrabold">ask me anything...</h1> */}
-        {/* <SignOutButton /> */}
       </div>
     </main>
   );
 };
 
-export default Home;
+export default Page;
 
-const SignOutButton = () => {
+const UserSettings = () => {
   return (
-    <button
-      className="rounded border border-white p-2 text-lg text-white"
-      onClick={() => signOut({ callbackUrl: "/" })}
-    >
-      Sign out
-    </button>
+    <div className="dropdown dropdown-end dropdown-hover">
+      <div tabIndex={0} role="button" className="btn btn-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+        </svg>
+      </div>
+      <ul
+        tabIndex={0}
+        className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+      >
+        <li>
+          <button onClick={() => signOut({ callbackUrl: "/" })}>
+            Sign out
+          </button>
+        </li>
+      </ul>
+    </div>
   );
 };
