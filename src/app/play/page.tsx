@@ -3,40 +3,14 @@
 import { type NextPage } from "next";
 import { signOut } from "next-auth/react";
 import { useChat } from "ai/react";
+import Markdown from "react-markdown";
 
-const conversation = [
-  {
-    id: 1,
-    role: "ai",
-    message: "Its over Anakin, I have the high ground.",
-  },
-  {
-    id: 2,
-    role: "user",
-    message: "You underestimate my power!",
-  },
-  {
-    id: 3,
-    role: "ai",
-    message: "Don't try it.",
-  },
-  {
-    id: 4,
-    role: "user",
-    message: "You never knew my father.",
-  },
-  {
-    id: 5,
-    role: "ai",
-    message: "I am your father.",
-  },
-];
 const Page: NextPage = () => {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
 
   return (
     <main className="h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] py-4">
-      <div className="bg-base-content container mx-auto h-full rounded-lg border-2 border-gray-400">
+      <div className="bg-base-200 container mx-auto h-full rounded-lg border-2 border-gray-400">
         {/* ai chat window with input at bottom */}
         <div className="flex h-full flex-col rounded-lg ">
           <div className="p-4 text-end">
@@ -44,27 +18,21 @@ const Page: NextPage = () => {
           </div>
           <div className="grow overflow-y-auto">
             <div className="p-4">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`chat ${
-                    message.role === "user" ? "chat-end" : "chat-start"
-                  }`}
-                >
-                  <div className="chat-bubble">{message.content}</div>
-                </div>
-              ))}
-
-              {/* {conversation.map((chat) => (
-                <div
-                  key={chat.id}
-                  className={`chat ${
-                    chat.role === "ai" ? "chat-start" : "chat-end"
-                  }`}
-                >
-                  <div className="chat-bubble">{chat.message}</div>
-                </div>
-              ))} */}
+              {messages.map((message) =>
+                message.role === "user" ? (
+                  <div key={message.id} className="chat chat-end">
+                    <div className="chat-bubble chat-bubble-success text-white">
+                      {message.content}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={message.id} className="chat chat-start">
+                    <div className="chat-bubble">
+                      <Markdown>{message.content}</Markdown>
+                    </div>
+                  </div>
+                ),
+              )}
             </div>
           </div>
           <form onSubmit={handleSubmit} className="flex gap-4 p-4">
