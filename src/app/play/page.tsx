@@ -2,35 +2,38 @@
 
 import { type NextPage } from "next";
 import { signOut } from "next-auth/react";
+import { useChat } from "ai/react";
 
 const conversation = [
   {
     id: 1,
-    sender: "ai",
+    role: "ai",
     message: "Its over Anakin, I have the high ground.",
   },
   {
     id: 2,
-    sender: "user",
+    role: "user",
     message: "You underestimate my power!",
   },
   {
     id: 3,
-    sender: "ai",
+    role: "ai",
     message: "Don't try it.",
   },
   {
     id: 4,
-    sender: "user",
+    role: "user",
     message: "You never knew my father.",
   },
   {
     id: 5,
-    sender: "ai",
+    role: "ai",
     message: "I am your father.",
   },
 ];
 const Page: NextPage = () => {
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
+
   return (
     <main className="h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] py-4">
       <div className="bg-base-content container mx-auto h-full rounded-lg border-2 border-gray-400">
@@ -41,26 +44,41 @@ const Page: NextPage = () => {
           </div>
           <div className="grow overflow-y-auto">
             <div className="p-4">
-              {conversation.map((chat) => (
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`chat ${
+                    message.role === "user" ? "chat-end" : "chat-start"
+                  }`}
+                >
+                  <div className="chat-bubble">{message.content}</div>
+                </div>
+              ))}
+
+              {/* {conversation.map((chat) => (
                 <div
                   key={chat.id}
                   className={`chat ${
-                    chat.sender === "ai" ? "chat-start" : "chat-end"
+                    chat.role === "ai" ? "chat-start" : "chat-end"
                   }`}
                 >
                   <div className="chat-bubble">{chat.message}</div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
-          <div className="flex gap-4 p-4">
+          <form onSubmit={handleSubmit} className="flex gap-4 p-4">
             <input
-              type="text"
               className="w-full rounded-lg border border-gray-600 p-2"
-              placeholder="Ask me anything..."
+              type="text"
+              placeholder="Ask me something..."
+              value={input}
+              onChange={handleInputChange}
             />
-            <button className="btn btn-primary">send</button>
-          </div>
+            <button type="submit" className="btn btn-primary">
+              send
+            </button>
+          </form>
         </div>
       </div>
     </main>
