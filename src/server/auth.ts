@@ -25,6 +25,9 @@ declare module "next-auth" {
   }
 }
 
+// TODO: check if this is used
+export type AuthUser = { id: string; email?: string | null };
+
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -61,6 +64,9 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  pages: {
+    signIn: "/signin",
+  },
 };
 
 function authorize(prisma: PrismaClient) {

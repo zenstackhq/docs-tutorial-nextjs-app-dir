@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import app from "~/app.config";
 
 const Signin: NextPage = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const Signin: NextPage = () => {
     });
 
     if (result?.ok) {
-      router.push("/");
+      router.push(app.routes.play);
     } else {
       alert("Signin failed");
     }
